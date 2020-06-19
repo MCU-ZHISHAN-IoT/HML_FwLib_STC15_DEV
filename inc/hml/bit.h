@@ -26,6 +26,12 @@
 #define BITS_PER_BYTE           8
 
 /**
+ *\brief: private function, don't use them.
+ */
+#define _ABS(x) ((x > 0) ? (x) : (-x))
+#define _MAX(a,b) (((a) > (b)) ? (a) : (b))
+
+/**
  *\brief: bit operation
  */
 #define CLR(x)                  (complement(1U << (x % BITS_PER_BYTE)))
@@ -48,5 +54,6 @@
 #define GET_BIT(reg,mask)       (not(not(reg bitand mask)))
 #define NOT_BIT_MASK(reg,mask)  (reg xor_eq mask)
 #define SET_BIT_MASK(reg,mask)  (reg or_eq mask)
+#define BITBAND_MASK(N,M) (((~(0xFF >> (_ABS(M-N)+1))) >> (0x7 - _MAX(N,M))) & (0xFF >> (0x7 - _MAX(N,M))))
 
 #endif
