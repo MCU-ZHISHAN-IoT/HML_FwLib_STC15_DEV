@@ -4,7 +4,7 @@
  * \author      Weilun Fong | wlf@zhishan-iot.tk
  * \brief       include all needed HML header files
  * \note        
- * \version     v1.2
+ * \version     v0.0
  * \ingroup     generic
 ******************************************************************************/
  
@@ -14,8 +14,8 @@
 /*****************************************************************************
  *                             header file                                   *
  *****************************************************************************/
-// #include "hml/conf.h"
-// #include "hml/macro.h"
+#include "hml/conf.h"
+#include "hml/macro.h"
 #include "hml/types.h"
 /*****************************************************************************/
 #include "hml/stc15.h"
@@ -29,7 +29,7 @@
 // #include "hml/tim2.h"
 // #include "hml/uart.h"
 #include "hml/util.h"
-// #include "hml/version.h"
+#include "hml/version.h"
 // #include "hml/wdt.h"
 
 #endif

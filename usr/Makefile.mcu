@@ -2,13 +2,13 @@
 
 # ------------------------------------------------------------------------
 # Author     : Weilun Fong | wlf@zhishan-iot.tk
-# Date       : 2020-02-06
+# Date       : 2020-08-08
 # Description: MCU parameters config Makefile
 # E-mail     : mcu@zhishan-iot.tk
 # Make-tool  : GNU Make (http://www.gnu.org/software/make/manual/make.html)
-# Page       : https://hw.zhishan-iot.tk/page/hml/detail/fwlib_stc89.html
-# Project    : HML_FwLib_STC89
-# Version    : v0.3.1
+# Page       : https://hw.zhishan-iot.tk/page/hml/detail/fwlib_stc15.html
+# Project    : HML_FwLib_STC15
+# Version    : v0.3.2
 # ------------------------------------------------------------------------
 
 # Print note information
@@ -40,95 +40,355 @@ endif
 ifneq ($(CODE),)
     export CODE_SIZE := $(shell echo $(CODE) | awk '{printf("%d",$$1*1024)}')
 endif
-# [IRAM] internal RAM
-# for stc89, this value is fixed to 256
-export IRAM_SIZE := 256
+
 # [XRAM] external RAM
+# @note: default value of XRAM is equal to on-chip intergrated RAM (EXTRAM=1)
 ifneq ($(XRAM),)
     export XRAM_SIZE := $(shell echo $(XRAM) | awk '{printf("%d",$$1*1024)}')
 endif
 
-# [MCU] MCU model enumeration
-# ifneq ($(MCU),)
-#     mcu_model := $(shell $(ECHO) $(MCU) | $(TR) '[a-z]' '[A-Z]')
-#     ifeq ($(mcu_model), STC89C51RC)
-#         MCU_MACRO := MCU_MODEL_$(mcu_model)
-#         CODE_SIZE ?= 4096
-#         XRAM_SIZE ?= 256
-#     else ifeq ($(mcu_model), STC89LE51RC)
-#         MCU_MACRO := MCU_MODEL_$(mcu_model)
-#         CODE_SIZE ?= 4096
-#         XRAM_SIZE ?= 256
-#     else ifeq ($(mcu_model), STC89C52RC)
-#         MCU_MACRO := MCU_MODEL_$(mcu_model)
-#         CODE_SIZE ?= 8192
-#         XRAM_SIZE ?= 256
-#     else ifeq ($(mcu_model), STC89LE52RC)
-#         MCU_MACRO := MCU_MODEL_$(mcu_model)
-#         CODE_SIZE ?= 8192
-#         XRAM_SIZE ?= 256
-#     else ifeq ($(mcu_model), STC89C53RC)
-#         MCU_MACRO := MCU_MODEL_$(mcu_model)
-#         CODE_SIZE ?= 13312
-#         XRAM_SIZE ?= 256
-#     else ifeq ($(mcu_model), STC89LE53RC)
-#         MCU_MACRO := MCU_MODEL_$(mcu_model)
-#         CODE_SIZE ?= 13312
-#         XRAM_SIZE ?= 256
-#     else ifeq ($(mcu_model), STC89C54RD+)
-#         MCU_MACRO := MCU_MODEL_STC89C54RDP
-#         CODE_SIZE ?= 16384
-#         XRAM_SIZE ?= 1024
-#     else ifeq ($(mcu_model), STC89LE54RD+)
-#         MCU_MACRO := MCU_MODEL_STC89LE54RDP
-#         CODE_SIZE ?= 16384
-#         XRAM_SIZE ?= 1024
-#     else ifeq ($(mcu_model), STC89C58RD+)
-#         MCU_MACRO := MCU_MODEL_STC89C58RDP
-#         CODE_SIZE ?= 32768
-#         XRAM_SIZE ?= 1024
-#     else ifeq ($(mcu_model), STC89LE58RD+)
-#         MCU_MACRO := MCU_MODEL_STC89LE58RDP
-#         CODE_SIZE ?= 32768
-#         XRAM_SIZE ?= 1024
-#     else ifeq ($(mcu_model), STC89C510RD+)
-#         MCU_MACRO := MCU_MODEL_STC89C510RDP
-#         CODE_SIZE ?= 40960
-#         XRAM_SIZE ?= 1024
-#     else ifeq ($(mcu_model), STC89LE510RD+)
-#         MCU_MACRO := MCU_MODEL_STC89LE510RDP
-#         CODE_SIZE ?= 40960
-#         XRAM_SIZE ?= 1024
-#     else ifeq ($(mcu_model), STC89C512RD+)
-#         MCU_MACRO := MCU_MODEL_STC89C512RDP
-#         CODE_SIZE ?= 49152
-#         XRAM_SIZE ?= 1024
-#     else ifeq ($(mcu_model), STC89LE512RD+)
-#         MCU_MACRO := MCU_MODEL_STC89LE512RDP
-#         CODE_SIZE ?= 49152
-#         XRAM_SIZE ?= 1024
-#     else ifeq ($(mcu_model), STC89C514RD+)
-#         MCU_MACRO := MCU_MODEL_STC89C514RDP
-#         CODE_SIZE ?= 57344
-#         XRAM_SIZE ?= 1024
-#     else ifeq ($(mcu_model), STC89LE514RD+)
-#         MCU_MACRO := MCU_MODEL_STC89LE514RDP
-#         CODE_SIZE ?= 57344
-#         XRAM_SIZE ?= 1024
-#     else ifeq ($(mcu_model), STC89C516RD+)
-#         MCU_MACRO := MCU_MODEL_STC89C516RDP
-#         CODE_SIZE ?= 65536
-#         XRAM_SIZE ?= 1024
-#     else ifeq ($(mcu_model), STC89LE516RD+)
-#         MCU_MACRO := MCU_MODEL_STC89LE516RDP
-#         CODE_SIZE ?= 65536
-#         XRAM_SIZE ?= 1024
-#     else
-#         $(error unknow or unsupport MCU model $(MCU))
-#     endif
-# else
-#     $(error unspecify MCU model!)
-# endif
+#[MCU] MCU model enumeration
+ifneq ($(MCU),)
+    mcu_model := $(shell echo $(MCU) | tr '[a-z]' '[A-Z]')
+    MCU_MACRO := MCU_MODEL_$(mcu_model)
+    ifeq ($(mcu_model), STC15F2K08S2)
+        CODE_SIZE ?= 8192
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15F2K16S2)
+        CODE_SIZE ?= 16384
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 8192
+    else ifeq ($(mcu_model), STC15F2K32S2)
+        CODE_SIZE ?= 32768
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15F2K40S2)
+        CODE_SIZE ?= 40960
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15F2K48S2)
+        CODE_SIZE ?= 49152
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15F2K56S2)
+        CODE_SIZE ?= 57344
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15F2K60S2)
+        CODE_SIZE ?= 61440
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), IAP15F2K61S2)
+        CODE_SIZE ?= 62464
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), IRC15F2K63S2)
+        CODE_SIZE ?= 65024
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15F2K32S)
+        CODE_SIZE ?= 32768
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15F2K60S)
+        CODE_SIZE ?= 61440
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), IAP15F2K61S)
+        CODE_SIZE ?= 62464
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15F2K24AS)
+        CODE_SIZE ?= 24576
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15F2K48AS)
+        CODE_SIZE ?= 49152
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K08S2)
+        CODE_SIZE ?= 8192
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K16S2)
+        CODE_SIZE ?= 16384
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K24S2)
+        CODE_SIZE ?= 24576
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K32S2)
+        CODE_SIZE ?= 32768
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K40S2)
+        CODE_SIZE ?= 40960
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K48S2)
+        CODE_SIZE ?= 49152
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K56S2)
+        CODE_SIZE ?= 57344
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K60S2)
+        CODE_SIZE ?= 61440
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), IAP15L2K61S2)
+        CODE_SIZE ?= 62464
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K32S)
+        CODE_SIZE ?= 32768
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K60S)
+        CODE_SIZE ?= 61440
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), IAP15L2K61S)
+        CODE_SIZE ?= 62464
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K24AS)
+        CODE_SIZE ?= 24576
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15L2K48AS)
+        CODE_SIZE ?= 49152
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 1792
+    else ifeq ($(mcu_model), STC15F100W)
+        CODE_SIZE ?= 512
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15F101W)
+        CODE_SIZE ?= 1024
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15F102W)
+        CODE_SIZE ?= 2048
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15F103W)
+        CODE_SIZE ?= 3072
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15F104W)
+        CODE_SIZE ?= 4096
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), IAP15F105W)
+        CODE_SIZE ?= 5120
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), IRC15F107W)
+        CODE_SIZE ?= 7168
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15L100W)
+        CODE_SIZE ?= 512
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15L101W)
+        CODE_SIZE ?= 1024
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15L102W)
+        CODE_SIZE ?= 2048
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15L104W)
+        CODE_SIZE ?= 4096
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), IAP15L105W)
+        CODE_SIZE ?= 5120
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15W100)
+        CODE_SIZE ?= 512
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15W101)
+        CODE_SIZE ?= 1024
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15W102)
+        CODE_SIZE ?= 2048
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15W103)
+        CODE_SIZE ?= 3072
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15W104)
+        CODE_SIZE ?= 4096
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), IAP15W105)
+        CODE_SIZE ?= 5120
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), IRC15W107)
+        CODE_SIZE ?= 7168
+        IRAM_SIZE := 128
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15W201S)
+        CODE_SIZE ?= 1024
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15W202S)
+        CODE_SIZE ?= 2048
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15W203S)
+        CODE_SIZE ?= 3072
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15W204S)
+        CODE_SIZE ?= 4096
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), IAP15W205S)
+        CODE_SIZE ?= 4096
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), IRC15W207S)
+        CODE_SIZE ?= 7680
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 0
+    else ifeq ($(mcu_model), STC15W401AS)
+        CODE_SIZE ?= 1024
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), STC15W402AS)
+        CODE_SIZE ?= 2048
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), STC15W404AS)
+        CODE_SIZE ?= 4096
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), STC15W408AS)
+        CODE_SIZE ?= 8192
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), IAP15W413AS)
+        CODE_SIZE ?= 13312
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), IRC15W415AS)
+        CODE_SIZE ?= 15872
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), STC15W404S)
+        CODE_SIZE ?= 4096
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), STC15W408S)
+        CODE_SIZE ?= 8192
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), STC15W410S)
+        CODE_SIZE ?= 10240
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), IAP15W413S)
+        CODE_SIZE ?= 13312
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), IRC15W415S)
+        CODE_SIZE ?= 15872
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), STC15W1K16S)
+        CODE_SIZE ?= 16384
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 768
+    else ifeq ($(mcu_model), STC15W1K24S)
+        CODE_SIZE ?= 24576
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 768
+    else ifeq ($(mcu_model), IAP15W1K29S)
+        CODE_SIZE ?= 29696
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 768
+    else ifeq ($(mcu_model), IRC15W1K31S)
+        CODE_SIZE ?= 32256
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 768
+    else ifeq ($(mcu_model), STC15W1K08PWM)
+        CODE_SIZE ?= 8192
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 768
+    else ifeq ($(mcu_model), STC15W1K16PWM)
+        CODE_SIZE ?= 16384
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 768
+    else ifeq ($(mcu_model), STC15W1K20S)
+        CODE_SIZE ?= 20480
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 768
+    else ifeq ($(mcu_model), STC15W4K16S4)
+        CODE_SIZE ?= 16384
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 3840
+    else ifeq ($(mcu_model), STC15W4K32S4)
+        CODE_SIZE ?= 32768
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 3840
+    else ifeq ($(mcu_model), STC15W4K40S4)
+        CODE_SIZE ?= 40960
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 3840
+    else ifeq ($(mcu_model), STC15W4K48S4)
+        CODE_SIZE ?= 49152
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 3840
+    else ifeq ($(mcu_model), STC15W4K56S4)
+        CODE_SIZE ?= 57344
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 3840
+    else ifeq ($(mcu_model), IAP15W4K58S4)
+        CODE_SIZE ?= 59392
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 3840
+    else ifeq ($(mcu_model), IAP15W4K61S4)
+        CODE_SIZE ?= 62464
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 3840
+    else ifeq ($(mcu_model), IRC15W4K63S4)
+        CODE_SIZE ?= 65024
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 3840
+    else ifeq ($(mcu_model), STC15F408AD)
+        CODE_SIZE ?= 8192
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), IAP15F413AD)
+        CODE_SIZE ?= 13312
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), STC15L408AD)
+        CODE_SIZE ?= 8192
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else ifeq ($(mcu_model), IAP15L413AD)
+        CODE_SIZE ?= 13312
+        IRAM_SIZE := 256
+        XRAM_SIZE ?= 256
+    else
+        $(error unknow or unsupport MCU model $(MCU))
+    endif
+else
+    $(error unspecify MCU model!)
+endif
 
 # Generate and export CFLAGS
 #   Details:
