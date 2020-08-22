@@ -16,7 +16,7 @@
 # Options for print format
 #  [VERBOSE] Print control option, when its value is "1", Makefile will print
 #   more details, or it will only print brief
-VERBOSE   ?= 0
+VERBOSE   ?= 1
 
 # Options for MCU configurations
 #  [MCU] MCU model option, user can get model support list via reading Makefile.mcu.

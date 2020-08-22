@@ -404,16 +404,17 @@ endif
 export CFLAGS := -c -I$(INCDIR) --fsigned-char \
 -mmcs51 -D__CONF_MCU_MODEL=$(MCU_MACRO) \
 -D__CONF_FRE_CLKIN=$(CLOCK_FREQUENCY)UL -D__CONF_MCU_PRESCALER=$(PRESCALER_FACTOR) \
---std-sdcc99 --fsigned-char\
---opt-code-size
+--std-sdcc99 --fsigned-char --Werror \
+--opt-code-size \
+--code-loc 0x0000 --code-size $(CODE_SIZE) \
+--iram-size $(IRAM_SIZE) \
+--xram-size $(XRAM_SIZE)
 # export CFLAGS := -c -I$(INCDIR) --fsigned-char \
 # -mmcs51 -D__CONF_MCU_MODEL=$(MCU_MACRO) \
 # -D__CONF_FRE_CLKIN=$(CLOCK_FREQUENCY)UL -D__CONF_MCU_PRESCALER=$(PRESCALER_FACTOR) \
 # --std-sdcc99 --fsigned-char\
 # --opt-code-size \
-# --code-loc 0x0000 --code-size $(CODE_SIZE) \
-# --iram-size $(IRAM_SIZE) \
-# --xram-size $(XRAM_SIZE)
+
 
 # Generate and export ARFLAGS
 #     -c      do not warn if the library had to be created
