@@ -22,7 +22,7 @@
  *****************************************************************************/
 
 /**
- * \brief: Subseries define of STC15 MCU
+ * \brief Subseries define of STC15 MCU
  */
 #define MCU_SUBSERIES_STC15F2K60S2     0x01
 #define MCU_SUBSERIES_STC15W100        0x02
@@ -37,7 +37,7 @@
 #define MCU_SUBSERIES_STC15F408AD      0x0B
 
 /**
- * \brief: mark MCU model of STC15 series
+ * \brief mark MCU model of STC15 series
  */
 #define MCU_MODEL_GENERIC              0x01
 
@@ -149,7 +149,7 @@
 #define MCU_MODEL_IAP15L413AD          0xB3
 
 /**
- *\brief: check macro for MCU model
+ * \brief check macro for MCU model
  */
 #define IS_STC15F2K60S2_SUBSERIES(model)         ((model >= MCU_MODEL_STC15F2K08S2) && (model <= MCU_MODEL_STC15L2K48AS))
 #define IS_STC15W100_SUBSERIES(model)            ((model >= MCU_MODEL_STC15F100W) && (model <= MCU_MODEL_IAP15L105W))
@@ -164,7 +164,7 @@
 #define IS_STC15F408AD_SUBSERIES(model)          ((model == MCU_MODEL_STC15F408AD) || (model == MCU_MODEL_IAP15L413AD))
 
 /**
- *\brief: compile select
+ * \brief compile select
  */
 #if (__CONF_COMPILE_EXTI == 1)
     #define COMPILE_EXTI
@@ -184,7 +184,7 @@
  *****************************************************************************/
 
 /**
- *\brief: MCU model check
+ * \brief MCU model check
  */
 #if (defined __CONF_MCU_MODEL)
     #if (__CONF_MCU_MODEL == MCU_MODEL_GENERIC)
@@ -223,7 +223,7 @@
 #endif
 
 /**
- *\brief: SDCC version check
+ * \brief SDCC version check
  */
 #if (__SDCC_VERSION_MAJOR == 3)
     #if (__SDCC_VERSION_MINOR < 6)

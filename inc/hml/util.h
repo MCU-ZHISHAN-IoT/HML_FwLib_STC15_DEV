@@ -22,7 +22,7 @@
  *                           enumeration type                                *
  *****************************************************************************/
 /**
- *\brief: mark interrupt priority, lager number means higher priority
+ * \brief mark interrupt priority, lager number means higher priority
  */
 // typedef enum
 // {
@@ -37,6 +37,7 @@
  *****************************************************************************/
 void disableAllInterrupts(void);
 void enableAllInterrupts(void);
-// void sleep(uint16_t t);
+void _sleep_1ms(void);
+void sleep(uint16_t t);
 
 #endif

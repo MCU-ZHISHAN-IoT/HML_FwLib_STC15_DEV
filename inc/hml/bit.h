@@ -21,24 +21,24 @@
  *****************************************************************************/
 
 /**
- *\brief: constants define
+ *\brief constants define
  */
 #define BITS_PER_BYTE           8
 
 /**
- *\brief: private function, don't use them.
+ *\brief private function, don't use them.
  */
 #define _ABS(x) ((x > 0) ? (x) : (-x))
 #define _MAX(a,b) (((a) > (b)) ? (a) : (b))
 
 /**
- *\brief: bit operation
+ *\brief bit operation
  */
 #define CLR(x)                  (complement(1U << (x % BITS_PER_BYTE)))
 #define SET(x)                  (1U << (x % BITS_PER_BYTE))
 
 /**
- *\brief: bit operation for register
+ *\brief bit operation for register
  */
 #define CLRB(reg,x)             (reg and_eq (complement(1U << (x % BITS_PER_BYTE))))
 #define NOTB(reg,x)             (reg xor_eq (1U << (x % BITS_PER_BYTE)))
@@ -47,7 +47,7 @@
 #define CONFB(reg,x,val)        (reg = (reg bitand (complement(1U << (x % BITS_PER_BYTE)))) bitor (val << x))
 
 /**
- *\brief: bit mask operation
+ *\brief bit mask operation
  */
 #define BIT_MASK(x)             SET(x)
 #define CLR_BIT_MASK(reg,mask)  (reg and_eq (complement(mask)))

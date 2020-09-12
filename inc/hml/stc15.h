@@ -672,4 +672,23 @@ __sbit __at (0xFF) P7_7      ;
 /* WKTCH bits */
 #define WKTEN           BIT_MASK(BIT_NUM_WKTEN)
 
+/* Interrupt numbers: address = (number * 8) + 3 */
+#define SI1_VECTOR      SI0_VECTOR     /* rename with offical rule */
+#define ADC_VECTOR      5    /* 0x2b analog-digital converter */
+#define LVD_VECTOR      6    /* 0x33 low voltage detect */
+#define PCA_VECTOR      7    /* 0x3b PCA module */
+#define SI2_VECTOR      8    /* 0x43 serial port 2 */
+#define SPI_VECTOR      9    /* 0x4b SPI bus */
+#define IE2_VECTOR      10   /* 0x53 external interrupt 2 */
+#define IE3_VECTOR      11   /* 0x5b external interrupt 3 */
+#define TF2_VECTOR      12   /* 0x63 timer 2 */
+#define IE4_VECTOR      16   /* 0x83 external interrupt 4 */
+#define SI3_VECTOR      17   /* 0x8b serial port 3 */
+#define SI4_VECTOR      18   /* 0x93 serial port 4 */
+#define TF3_VECTOR      19   /* 0x9b timer 3 */
+#define TF4_VECTOR      20   /* 0xa3 timer 4 */
+#define CMP_VECTOR      21   /* 0xab comparator */
+#define PWM_VECTOR      22   /* 0xb3 PWM module */
+#define PWME_VECTOR     23   /* 0xbb PWM exception */
+
 #endif

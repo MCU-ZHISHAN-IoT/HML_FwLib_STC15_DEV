@@ -21,7 +21,7 @@
 #include "hml/stc15.h"
 /*****************************************************************************/
 // #include "hml/exti.h"
-// #include "hml/gpio.h"
+#include "hml/gpio.h"
 // #include "hml/isp.h"
 // #include "hml/mem.h"
 // #include "hml/rst.h"
