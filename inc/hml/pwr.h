@@ -1,15 +1,15 @@
 /*****************************************************************************/
 /** 
- * \file        util.h
+ * \file        pwr.h
  * \author      Weilun Fong | wlf@zhishan-iot.tk
- * \brief       public operations
+ * \brief       operation for power control
  * \note        
  * \version     v0.0
- * \ingroup     UTIL
+ * \ingroup     PWR
 ******************************************************************************/
 
-#ifndef ___HML_UTIL_H___
-#define ___HML_UTIL_H___
+#ifndef ___PWR_H___
+#define ___PWR_H___
 
 /*****************************************************************************
  *                             header file                                   *
@@ -19,24 +19,11 @@
 #include "hml/types.h"
 
 /*****************************************************************************
- *                           enumeration type                                *
- *****************************************************************************/
-/**
- * \brief mark interrupt priority, lager number means higher priority
- */
-// typedef enum
-// {
-//     UTIL_interruptPriority_0 = 0x00,
-//     UTIL_interruptPriority_1 = 0x01,
-//     UTIL_interruptPriority_2 = 0x02,
-//     UTIL_interruptPriority_3 = 0x03,
-// } UTIL_interruptPriority;
-
-/*****************************************************************************
  *                          function declare                                 *
  *****************************************************************************/
-void disableAllInterrupts(void);
-void enableAllInterrupts(void);
-void sleep(uint16_t t);
+void PWR_setPowerSavingMode(PWR_powerSavingMode mode);
+void PWR_LVD_cmd(Action a);
+void PWR_LVD_setInterruptPriority(Action a);
+FunctionalState PWR_LVD_getFlag(void);
 
 #endif

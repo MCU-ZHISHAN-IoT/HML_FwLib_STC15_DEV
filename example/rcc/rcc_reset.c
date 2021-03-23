@@ -60,45 +60,13 @@ void main(void)
 
     sys_init();
 
-    // star!
-    P0 = 0x00;
-    sleep(1000);
-    P0 = 0xFF;
-    sleep(1000);
-
-    // read POF
-    GPIO_configBitValue(PERIPH_GPIO_0, PERIPH_GPIO_PIN_0, RESET);
-    GPIO_configBitValue(PERIPH_GPIO_0, PIN_LED, (!((PCON & 0x10) >> 0x4)));
-    sleep(1000);
-    P0 = 0xff;
-
-    // clear POF
-    if (PCON & 0x10)
-    {
-        PCON = PCON & 0xEF;
-    }
-    sleep(3000);
-
-    // signal
-    P0 = 0x00;
-    sleep(1000);
-    P0 = 0xFF;
-    sleep(1000);
-
-    // read POF again
-    GPIO_configBitValue(PERIPH_GPIO_0, PERIPH_GPIO_PIN_0, RESET);
-    GPIO_configBitValue(PERIPH_GPIO_0, PIN_LED, (!((PCON & 0x10) >> 0x4)));
-    sleep(1000);
-    P0 = 0xff;
-    sleep(1000);
-
     /**
      * \brief blink LED in the beginning
      */
     for (i = 6; i > 0; i--)
     {
-        GPIO_toggleBitValue(PERIPH_GPIO_0, PIN_LED);
         sleep(500);
+        GPIO_toggleBitValue(PERIPH_GPIO_0, PIN_LED);
     }
 
     /**
@@ -106,5 +74,6 @@ void main(void)
      */
     sleep(3000);
     RCC_reset();
+
     while(true);
 }

@@ -2,13 +2,13 @@
 
 # ------------------------------------------------------------------------
 # Author     : Weilun Fong | wlf@zhishan-iot.tk
-# Date       : 2020-07-12
+# Date       : 2021-03-04
 # Description: project Makefile
 # E-mail     : mcu@zhishan-iot.tk
 # Make-tool  : GNU Make (http://www.gnu.org/software/make/manual/make.html)
-# Page       : https://hw.zhishan-iot.tk/page/hml/detail/FWLIB_N_stc15.html
-# Project    : HML_FWLIB_N_STC15
-# Version    : v0.3.2
+# Page       : https://hw.zhishan-iot.tk/page/hml/detail/stc15.html
+# Project    : HML_FwLib_STC15
+# Version    : v0.0.1
 # ------------------------------------------------------------------------
 
 export SHELL       := /bin/bash

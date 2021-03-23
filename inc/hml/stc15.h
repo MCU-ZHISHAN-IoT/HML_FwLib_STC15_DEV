@@ -17,6 +17,7 @@
 /*  BYTE Register  */
 __sfr __at (0x84) S4CON      ;
 __sfr __at (0x85) S4BUF      ;
+__sfr __at (0x87) PCON       ;
 __sfr __at (0x8E) AUXR       ;
 __sfr __at (0x8F) AUXR2      ;
     #define INT_CLKO AUXR2   /* AUXR2's alias */
@@ -339,15 +340,21 @@ __sbit __at (0xFF) P7_7      ;
 #define BIT_NUM_EBS0_1       7
 
 /* PCON bits */
+#define BIT_NUM_IDL          0
+#define BIT_NUM_PD           1
+#define BIT_NUM_GF0          2
+#define BIT_NUM_GF1          3
 #define BIT_NUM_POF          4
 #define BIT_NUM_LVDF         5
 #define BIT_NUM_SMOD0        6
+#define BIT_NUM_SMOD         7
 
 /* PCON2 bits */
 #define BIT_NUM_CLKS0        0
 #define BIT_NUM_CLKS1        1
 #define BIT_NUM_CLKS2        2
 #define BIT_NUM_MCLKO_2      3
+    #define BIT_NUM_SYSCLKO_2 BIT_NUM_MCLKO_2
 #define BIT_NUM_TX_RX        4
 #define BIT_NUM_ADRJ         5
 #define BIT_NUM_MCLKO_S0     6
@@ -580,6 +587,17 @@ __sbit __at (0xFF) P7_7      ;
 #define LVDF            BIT_MASK(BIT_NUM_LVDF)
 #define SMOD0           BIT_MASK(BIT_NUM_SMOD0)
 
+/* PCON2 bits */
+#define CLKS0           BIT_MASK(BIT_NUM_CLKS0)
+#define CLKS1           BIT_MASK(BIT_NUM_CLKS1)
+#define CLKS2           BIT_MASK(BIT_NUM_CLKS2)
+#define MCLKO_2         BIT_MASK(BIT_NUM_MCLKO_2)
+#define SYSCLKO_2       BIT_MASK(BIT_NUM_SYSCLKO_2)   /* CLK_DEV.3's alias */
+#define TX_RX           BIT_MASK(BIT_NUM_TX_RX)
+#define ADRJ            BIT_MASK(BIT_NUM_ADRJ)
+#define MCLKO_S0        BIT_MASK(BIT_NUM_MCKO_S0)
+#define MCLKO_S1        BIT_MASK(BIT_NUM_MCKO_S1)
+
 /* PWMCFG bits */
 #define C2INI           BIT_MASK(BIT_NUM_C2INI)
 #define C3INI           BIT_MASK(BIT_NUM_C3INI)
@@ -673,7 +691,7 @@ __sbit __at (0xFF) P7_7      ;
 #define WKTEN           BIT_MASK(BIT_NUM_WKTEN)
 
 /* Interrupt numbers: address = (number * 8) + 3 */
-#define SI1_VECTOR      SI0_VECTOR     /* rename with offical rule */
+#define SI1_VECTOR      SI0_VECTOR     /* rename with STC Micro offical rule */
 #define ADC_VECTOR      5    /* 0x2b analog-digital converter */
 #define LVD_VECTOR      6    /* 0x33 low voltage detect */
 #define PCA_VECTOR      7    /* 0x3b PCA module */

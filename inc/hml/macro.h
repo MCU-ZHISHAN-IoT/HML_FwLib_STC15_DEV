@@ -175,6 +175,9 @@
 #if (__CONF_COMPILE_IAP == 1)
     #define COMPILE_IAP
 #endif
+#if (__CONF_COMPILE_RCC == 1)
+    #define COMPILE_RCC
+#endif
 #if (__CONF_COMPILE_UTIL == 1)
     #define COMPILE_UTIL
 #endif

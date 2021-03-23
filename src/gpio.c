@@ -71,31 +71,11 @@ void GPIO_configMode(PERIPH_GPIO gpio, PERIPH_GPIO_PIN pin, GPIO_mode mode)
     byte m1 = 0x00;
 
     /**
-     * @note: obtain mode bit
+     * \note obtain mode bit
      */
-    if (TESTB(mode, 0))
-    {
-        m0 = pin;
-    }
-    else
-    {
-        m0 = ~pin;
-    }
-    if (TESTB(mode, 1))
-    {
-        m1 = pin;
-    }
-    else
-    {
-        m1 = ~pin;
-    }
+    m0 = (TESTB(mode, 0)?pin:(~pin)) & pin;
+    m1 = (TESTB(mode, 1)?pin:(~pin)) & pin;
 
-    m0 = m0 & pin;      /* reserve target bit and clear other bits */
-    m1 = m1 & pin;
-
-    /**
-     * @note: obtain mode bit
-     */
     switch(gpio)
     {
         /* P0 */
@@ -193,14 +173,14 @@ FunctionalState GPIO_getBitValue(PERIPH_GPIO gpio, PERIPH_GPIO_PIN pin)
 {
     switch(gpio)
     {
-        case PERIPH_GPIO_0: return GET_BIT(P0,pin);
-        case PERIPH_GPIO_1: return GET_BIT(P1,pin);
-        case PERIPH_GPIO_2: return GET_BIT(P2,pin);
-        case PERIPH_GPIO_3: return GET_BIT(P3,pin);
-        case PERIPH_GPIO_4: return GET_BIT(P4,pin);
-        case PERIPH_GPIO_5: return GET_BIT(P5,pin);
-        case PERIPH_GPIO_6: return GET_BIT(P6,pin);
-        case PERIPH_GPIO_7: return GET_BIT(P7,pin);
+        case PERIPH_GPIO_0: return GET_BIT(P0, pin);
+        case PERIPH_GPIO_1: return GET_BIT(P1, pin);
+        case PERIPH_GPIO_2: return GET_BIT(P2, pin);
+        case PERIPH_GPIO_3: return GET_BIT(P3, pin);
+        case PERIPH_GPIO_4: return GET_BIT(P4, pin);
+        case PERIPH_GPIO_5: return GET_BIT(P5, pin);
+        case PERIPH_GPIO_6: return GET_BIT(P6, pin);
+        case PERIPH_GPIO_7: return GET_BIT(P7, pin);
         default: return RESET;
     }
 }
@@ -246,14 +226,14 @@ void GPIO_resetBitValue(PERIPH_GPIO gpio, PERIPH_GPIO_PIN pin)
 {
     switch(gpio)
     {
-        case PERIPH_GPIO_0: CLR_BIT_MASK(P0,pin); break;
-        case PERIPH_GPIO_1: CLR_BIT_MASK(P1,pin); break;
-        case PERIPH_GPIO_2: CLR_BIT_MASK(P2,pin); break;
-        case PERIPH_GPIO_3: CLR_BIT_MASK(P3,pin); break;
-        case PERIPH_GPIO_4: CLR_BIT_MASK(P4,pin); break;
-        case PERIPH_GPIO_5: CLR_BIT_MASK(P4,pin); break;
-        case PERIPH_GPIO_6: CLR_BIT_MASK(P4,pin); break;
-        case PERIPH_GPIO_7: CLR_BIT_MASK(P4,pin); break;
+        case PERIPH_GPIO_0: CLR_BIT_MASK(P0, pin); break;
+        case PERIPH_GPIO_1: CLR_BIT_MASK(P1, pin); break;
+        case PERIPH_GPIO_2: CLR_BIT_MASK(P2, pin); break;
+        case PERIPH_GPIO_3: CLR_BIT_MASK(P3, pin); break;
+        case PERIPH_GPIO_4: CLR_BIT_MASK(P4, pin); break;
+        case PERIPH_GPIO_5: CLR_BIT_MASK(P4, pin); break;
+        case PERIPH_GPIO_6: CLR_BIT_MASK(P4, pin); break;
+        case PERIPH_GPIO_7: CLR_BIT_MASK(P4, pin); break;
         default: break;
     }
 }
@@ -269,18 +249,18 @@ void GPIO_resetBitValue(PERIPH_GPIO gpio, PERIPH_GPIO_PIN pin)
  * \ingroup     GPIO
  * \remarks     
 ******************************************************************************/
-void GPIO_setBitValue(PERIPH_GPIO gpio,PERIPH_GPIO_PIN pin)
+void GPIO_setBitValue(PERIPH_GPIO gpio, PERIPH_GPIO_PIN pin)
 {
     switch(gpio)
     {
-        case PERIPH_GPIO_0: SET_BIT_MASK(P0,pin); break;
-        case PERIPH_GPIO_1: SET_BIT_MASK(P1,pin); break;
-        case PERIPH_GPIO_2: SET_BIT_MASK(P2,pin); break;
-        case PERIPH_GPIO_3: SET_BIT_MASK(P3,pin); break;
-        case PERIPH_GPIO_4: SET_BIT_MASK(P4,pin); break;
-        case PERIPH_GPIO_5: SET_BIT_MASK(P4,pin); break;
-        case PERIPH_GPIO_6: SET_BIT_MASK(P4,pin); break;
-        case PERIPH_GPIO_7: SET_BIT_MASK(P4,pin); break;
+        case PERIPH_GPIO_0: SET_BIT_MASK(P0, pin); break;
+        case PERIPH_GPIO_1: SET_BIT_MASK(P1, pin); break;
+        case PERIPH_GPIO_2: SET_BIT_MASK(P2, pin); break;
+        case PERIPH_GPIO_3: SET_BIT_MASK(P3, pin); break;
+        case PERIPH_GPIO_4: SET_BIT_MASK(P4, pin); break;
+        case PERIPH_GPIO_5: SET_BIT_MASK(P5, pin); break;
+        case PERIPH_GPIO_6: SET_BIT_MASK(P6, pin); break;
+        case PERIPH_GPIO_7: SET_BIT_MASK(P7, pin); break;
         default: break;
     }
 }
@@ -296,18 +276,18 @@ void GPIO_setBitValue(PERIPH_GPIO gpio,PERIPH_GPIO_PIN pin)
  * \ingroup     GPIO
  * \remarks     
 ******************************************************************************/
-void GPIO_toggleBitValue(PERIPH_GPIO gpio,PERIPH_GPIO_PIN pin)
+void GPIO_toggleBitValue(PERIPH_GPIO gpio, PERIPH_GPIO_PIN pin)
 {
     switch(gpio)
     {
-        case PERIPH_GPIO_0: NOT_BIT_MASK(P0,pin); break;
-        case PERIPH_GPIO_1: NOT_BIT_MASK(P1,pin); break;
-        case PERIPH_GPIO_2: NOT_BIT_MASK(P2,pin); break;
-        case PERIPH_GPIO_3: NOT_BIT_MASK(P3,pin); break;
-        case PERIPH_GPIO_4: NOT_BIT_MASK(P4,pin); break;
-        case PERIPH_GPIO_5: NOT_BIT_MASK(P4,pin); break;
-        case PERIPH_GPIO_6: NOT_BIT_MASK(P4,pin); break;
-        case PERIPH_GPIO_7: NOT_BIT_MASK(P4,pin); break;
+        case PERIPH_GPIO_0: NOT_BIT_MASK(P0, pin); break;
+        case PERIPH_GPIO_1: NOT_BIT_MASK(P1, pin); break;
+        case PERIPH_GPIO_2: NOT_BIT_MASK(P2, pin); break;
+        case PERIPH_GPIO_3: NOT_BIT_MASK(P3, pin); break;
+        case PERIPH_GPIO_4: NOT_BIT_MASK(P4, pin); break;
+        case PERIPH_GPIO_5: NOT_BIT_MASK(P5, pin); break;
+        case PERIPH_GPIO_6: NOT_BIT_MASK(P6, pin); break;
+        case PERIPH_GPIO_7: NOT_BIT_MASK(P7, pin); break;
         default: break;
     }
 }

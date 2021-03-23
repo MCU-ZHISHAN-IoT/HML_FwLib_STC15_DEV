@@ -24,7 +24,7 @@
 #include "hml/gpio.h"
 // #include "hml/isp.h"
 // #include "hml/mem.h"
-// #include "hml/rst.h"
+#include "hml/rcc.h"
 // #include "hml/tim.h"
 // #include "hml/tim2.h"
 // #include "hml/uart.h"

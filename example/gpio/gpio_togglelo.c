@@ -6,7 +6,7 @@
  * \note        
  * \version     v0.0
  * \ingroup     example
- * \remarks     test-board: ELH(黑灵) STC15F board; test-MCU: STC15F2K60S2
+ * \remarks     test-board: FD51F_DB_V2.0; test-MCU: IAP15F2K61S2
 ******************************************************************************/
 
 /*****************************************************************************
@@ -40,7 +40,8 @@ void sys_init(void)
     gc.pin   = PIN_LED;
     gc.mode  = GPIO_mode_PP;
     gc.value = RESET;
-    GPIO_config(PERIPH_GPIO_3, &gc);
+    GPIO_config(PERIPH_GPIO_0, &gc);
+    GPIO_configPortValue(PERIPH_GPIO_0, 0xFF);
 }
 
 /*****************************************************************************/
@@ -63,6 +64,6 @@ void main(void)
     while(true)
     {
         sleep(500);
-        GPIO_toggleBitValue(PERIPH_GPIO_3, PIN_LED);
+        GPIO_toggleBitValue(PERIPH_GPIO_0, PIN_LED);
     }
 }
