@@ -45,7 +45,7 @@ void enableAllInterrupts(void)
 /*****************************************************************************/
 /**
  * \author      Qiyuan Chen & Jiabin Hsu
- * \date        2020/01/28
+ * \date        2022/02/26
  * \brief       get _sleep_1ms initial value
  * \param[in]   none
  * \return      none
@@ -54,14 +54,14 @@ void enableAllInterrupts(void)
 ******************************************************************************/
 uint16_t _sleep_getInitValue(void)
 {
-    return 0xFFFF - ((__CONF_FRE_CLKIN/(float)1000/16) - 1);
+    return (uint16_t)(MCU_FRE_CLK/(float)1000/5) - 18;
 }
 
 /*****************************************************************************/
 /**
  * \author      Jiabin Hsu
- * \date        2020/09/11
- * \brief       sleep 1 ms
+ * \date        2022/01/27
+ * \brief       sleep 1 ms, at STC-Y5 instruction set
  * \param[in]   none
  * \return      none
  * \ingroup     UTIL
@@ -70,26 +70,14 @@ uint16_t _sleep_getInitValue(void)
 void _sleep_1ms(void)
 {
     __asm
-        push dpl                    ;#3
-        push dph                    ;#3
-        mov dpl, r6                 ;#2
-        mov dph, r7                 ;#2
+        push ar6                    ;#3 low
+        push ar7                    ;#3 high
+        inc  ar7                    ;#3
     delay1ms_loop$:
-        inc dptr                    ;#1
-        mov a,dpl                   ;#2
-        anl a,dph                   ;#2
-        cpl a                       ;#1
-        nop                         ;#1
-        nop                         ;#1
-        nop                         ;#1
-        nop                         ;#1
-        nop                         ;#1
-        nop                         ;#1
-        jnz delay1ms_loop$          ;#4
-
-        pop dph                     ;#2
-        pop dpl                     ;#2
-
+        djnz ar6,delay1ms_loop$     ;#5
+        djnz ar7,delay1ms_loop$     ;#5
+        pop ar7                     ;#2
+        pop ar6                     ;#2
         ret                         ;#4
     __endasm;
 }
@@ -97,7 +85,7 @@ void _sleep_1ms(void)
 /*****************************************************************************/
 /**
  * \author      Jiabin Hsu
- * \date        2020/09/11
+ * \date        2022/02/26
  * \brief       software delay according to MCU clock frequency
  * \param[in]   t: how many one ms you want to delay
  * \return      none
@@ -141,7 +129,8 @@ void sleep(uint16_t t)
     ; loop for sleep
     ; loop from (0xFFFF - t) to (0xFFFF)
     LOOP$:
-        lcall __sleep_1ms               ;#16 * ((__CONF_FRE_CLKIN/(float)1000/16) - 2) + 18
+        lcall __sleep_1ms               ;#5*(ar7*(256 + 1) + ar6)  _sleep_1ms
+                                        ;#4                        lcall
         inc dptr                        ;#1
         mov a,dpl                       ;#2
         anl a,dph                       ;#2
@@ -152,7 +141,10 @@ void sleep(uint16_t t)
         nop                             ;#1
         nop                             ;#1
         nop                             ;#1
-        jnz LOOP$                       ;#2
+        nop                             ;#1
+        nop                             ;#1
+        nop                             ;#1
+        jnz LOOP$                       ;#4
     ENDL$:
         pop ar7
         pop ar6
@@ -160,10 +152,7 @@ void sleep(uint16_t t)
         ret
     __endasm;
 
-    /**
-     * \note disable SDCC warning
-     */
-    t = 0;
+    UNUSED(t);
 }
 
 #endif

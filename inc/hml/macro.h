@@ -182,9 +182,23 @@
     #define COMPILE_UTIL
 #endif
 
+/**
+ * \brief for unused variable to disable SDCC warning
+ */
+#define UNUSED(x) ((void)(x))
+
 /*****************************************************************************
  *                           run-time check                                  *
  *****************************************************************************/
+
+/**
+ * \brief MCU clock configuration check
+ */
+#if (defined __CONF_FRE_CLKIN)
+    #define MCU_FRE_CLK __CONF_FRE_CLKIN
+#else
+    #error HML run-time check: error: HML need define input clock frequency! (ERROR_CODE-0x01)
+#endif
 
 /**
  * \brief MCU model check
