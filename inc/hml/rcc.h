@@ -35,6 +35,15 @@ typedef enum
     RCC_prescaler_128 = 0x07      /* 1/128 */
 } RCC_MCLK_prescalerValue;
 
+/**
+ * \brief boot area define
+ */
+typedef enum
+{
+    RCC_bootMode_ap  = 0x0,       /* boot from application area */
+    RCC_bootMode_iap = 0x1        /* boot from IAP area */
+} RCC_bootMode;
+
 /*****************************************************************************
  *                          function declare                                 *
  *****************************************************************************/

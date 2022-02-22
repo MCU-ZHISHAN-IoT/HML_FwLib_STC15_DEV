@@ -2,13 +2,13 @@
 
 # ------------------------------------------------------------------------
 # Author     : Weilun Fong | wlf@zhishan-iot.tk
-# Date       : 2020-08-08
+# Date       : 2021-10-24
 # Description: MCU parameters config Makefile
 # E-mail     : mcu@zhishan-iot.tk
 # Make-tool  : GNU Make (http://www.gnu.org/software/make/manual/make.html)
-# Page       : https://hw.zhishan-iot.tk/page/hml/detail/fwlib_stc15.html
-# Project    : HML_FwLib_STC15
-# Version    : v0.3.2
+# Page       : https://hw.zhishan-iot.tk/page/hml/detail/fwlib_stc89.html
+# Project    : HML_FwLib_STC89
+# Version    : v0.4.0
 # ------------------------------------------------------------------------
 
 # Print note information
@@ -17,7 +17,7 @@ $(info $(SPACE)- Collect MCU config information)
 # Configuration parameter translation
 # [CLKFRE] frequency of MCU clock
 ifneq ($(CLKFRE),)
-    ifeq ($(shell echo $(CLKFRE) | grep '^[[:digit:]]*$$'),)
+    ifeq ($(shell $(ECHO) $(CLKFRE) | $(GREP) '^[[:digit:]]*$$'),)
         $(error invalid CLKFRE value)
     else
         CLOCK_FREQUENCY := $(CLKFRE)
@@ -38,18 +38,16 @@ endif
 
 # [CODE] internal ROM
 ifneq ($(CODE),)
-    export CODE_SIZE := $(shell echo $(CODE) | awk '{printf("%d",$$1*1024)}')
+    export CODE_SIZE := $(shell $(ECHO) $(CODE) | $(AWK) '{printf("%d",$$1*1024)}')
 endif
-
 # [XRAM] external RAM
-# @note: default value of XRAM is equal to on-chip intergrated RAM (EXTRAM=1)
 ifneq ($(XRAM),)
-    export XRAM_SIZE := $(shell echo $(XRAM) | awk '{printf("%d",$$1*1024)}')
+    export XRAM_SIZE := $(shell $(ECHO) $(XRAM) | $(AWK) '{printf("%d",$$1*1024)}')
 endif
 
-#[MCU] MCU model enumeration
+# [MCU] MCU model enumeration
 ifneq ($(MCU),)
-    mcu_model := $(shell echo $(MCU) | tr '[a-z]' '[A-Z]')
+    mcu_model := $(shell $(ECHO) $(MCU) | $(TR) '[a-z]' '[A-Z]')
     MCU_MACRO := MCU_MODEL_$(mcu_model)
     ifeq ($(mcu_model), STC15F2K08S2)
         CODE_SIZE ?= 8192
@@ -404,25 +402,19 @@ endif
 export CFLAGS := -c -I$(INCDIR) \
 -mmcs51 -D__CONF_MCU_MODEL=$(MCU_MACRO) \
 -D__CONF_FRE_CLKIN=$(CLOCK_FREQUENCY)UL -D__CONF_MCU_PRESCALER=$(PRESCALER_FACTOR) \
---std-sdcc99 --fsigned-char --Werror \
+--std-sdcc99 --fsigned-char \
 --opt-code-size \
 --code-loc 0x0000 --code-size $(CODE_SIZE) \
 --iram-size $(IRAM_SIZE) \
 --xram-size $(XRAM_SIZE)
-# export CFLAGS := -c -I$(INCDIR) --fsigned-char \
-# -mmcs51 -D__CONF_MCU_MODEL=$(MCU_MACRO) \
-# -D__CONF_FRE_CLKIN=$(CLOCK_FREQUENCY)UL -D__CONF_MCU_PRESCALER=$(PRESCALER_FACTOR) \
-# --std-sdcc99 --fsigned-char\
-# --opt-code-size \
 
-
-# Generate and export ARFLAGS
+# Generate and export AFLAGS
 #     -c      do not warn if the library had to be created
 #     -s      act as ranlib
 #     -r      replace existing or insert new file(s) into the archive
-ARFLAGS       := -rcs
+AFLAGS        := -rcs
 
 # Print final MCU information according to all configurations
 $(info [mcu-model] $(mcu_model) (code=$(CODE_SIZE)B, iram=$(IRAM_SIZE)B, xram=$(XRAM_SIZE)B))
-$(info [mcu-clock] $(shell echo $(CLOCK_FREQUENCY) | awk '{printf("%.6f",$$1/1000000)}') MHz)
+$(info [mcu-clock] $(shell $(ECHO) $(CLOCK_FREQUENCY) | $(AWK) '{printf("%.6f",$$1/1000000)}') MHz)
 $(info [prescaler] $(PRESCALER_FACTOR)T mode)
