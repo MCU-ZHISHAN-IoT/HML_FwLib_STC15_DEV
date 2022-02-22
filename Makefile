@@ -111,9 +111,9 @@ $(OBJDIR)/$(LIB): $(RELS)
 
 # Compile executable file
 $(EXE_REL): $(EXE_C) $(OBJDIR)/$(LIB)
-	@$(EECHO) "$(HIGHLIGHT) - Make executable `$(BASENAME) $@` \033[0m"
+	@$(EECHO) "$(HIGHLIGHT) - Make executable $@ \033[0m"
 	$(VECHO) "CC  $<"
-	$(Q)$(CC) $< $(CFLAGS) -L$(OBJDIR) -lhml_stc89 -o $(OBJDIR)/`$(BASENAME) $@`
+	$(Q)$(CC) $< $(CFLAGS) -L$(OBJDIR) -lhml_stc89 -o $@
 
 # Generate .hex file
 $(OBJDIR)/$(TARGET).ihx: $(EXE_REL)

@@ -28,7 +28,7 @@ __sfr __at (0x94) P0M0       ;
 __sfr __at (0x95) P2M1       ;
 __sfr __at (0x96) P2M0       ;
 __sfr __at (0x97) PCON2      ;
-    #define PCON2 CLK_DIV    /* PCON2's alias */
+    #define CLK_DIV PCON2    /* PCON2's alias */
 __sfr __at (0x9A) S2CON      ;
 __sfr __at (0x9B) S2BUF      ;
 __sfr __at (0x9D) P1ASF      ;
@@ -592,7 +592,7 @@ __sbit __at (0xFF) P7_7      ;
 #define CLKS1           BIT_MASK(BIT_NUM_CLKS1)
 #define CLKS2           BIT_MASK(BIT_NUM_CLKS2)
 #define MCLKO_2         BIT_MASK(BIT_NUM_MCLKO_2)
-#define SYSCLKO_2       BIT_MASK(BIT_NUM_SYSCLKO_2)   /* CLK_DEV.3's alias */
+#define SYSCLKO_2       BIT_MASK(BIT_NUM_SYSCLKO_2)   /* CLK_DIV.3's alias */
 #define TX_RX           BIT_MASK(BIT_NUM_TX_RX)
 #define ADRJ            BIT_MASK(BIT_NUM_ADRJ)
 #define MCLKO_S0        BIT_MASK(BIT_NUM_MCKO_S0)
