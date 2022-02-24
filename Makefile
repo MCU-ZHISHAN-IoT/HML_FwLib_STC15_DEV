@@ -2,7 +2,7 @@
 
 # ------------------------------------------------------------------------
 # Author     : Weilun Fong | wlf@zhishan-iot.tk
-# Date       : 2022-02-22
+# Date       : 2022-02-24
 # Description: project Makefile
 # E-mail     : mcu@zhishan-iot.tk
 # Make-tool  : GNU Make (http://www.gnu.org/software/make/manual/make.html)
@@ -72,7 +72,8 @@ else
 endif
 
 # Important files
-LIB      := libhml_stc15.lib
+LIBNAME  := hml_stc15
+LIB      := lib$(LIBNAME).lib
 SRCS     := $(wildcard $(SRCDIR)/*.c)
 RELS     := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.rel, $(SRCS))
 EXE_REL  := $(patsubst %.c, $(OBJDIR)/%.rel, $(notdir $(EXE_C)))
@@ -81,7 +82,7 @@ EXE_REL  := $(patsubst %.c, $(OBJDIR)/%.rel, $(notdir $(EXE_C)))
 TARGET        := output
 
 # Version define
-MK_VERSION    := v0.4.0
+MK_VERSION    := v0.4.1
 
 # ----------------------------------------
 #  Build rules
@@ -111,9 +112,9 @@ $(OBJDIR)/$(LIB): $(RELS)
 
 # Compile executable file
 $(EXE_REL): $(EXE_C) $(OBJDIR)/$(LIB)
-	@$(EECHO) "$(HIGHLIGHT) - Make executable $@ \033[0m"
+	@$(EECHO) "$(HIGHLIGHT) - Make executable `$(BASENAME) $@` \033[0m"
 	$(VECHO) "CC  $<"
-	$(Q)$(CC) $< $(CFLAGS) -L$(OBJDIR) -lhml_stc89 -o $@
+	$(Q)$(CC) $< $(CFLAGS) -L$(OBJDIR) -l$(LIBNAME) -o $@
 
 # Generate .hex file
 $(OBJDIR)/$(TARGET).ihx: $(EXE_REL)
@@ -196,7 +197,7 @@ rebuild:
 version:
 	@$(ECHO) "HmlFwlibMakefile [$(MK_VERSION)]"
 	@$(ECHO) "General purpose Makefile for HML firmware library."
-	@$(ECHO) "Copyright(c) 2018-2021 ZHISHAN-IoT, all rights reserved."
+	@$(ECHO) "Copyright(c) 2018-2022 ZHISHAN-IoT, all rights reserved."
 	@$(ECHO) ""
 	@$(ECHO) "Adapted for HML_FwLib_STC89 by Jiabin Hsu <zsiothsu@zhishan-iot.tk>"
 	@$(ECHO) "Report bugs and patches to <wlf@zhishan-iot.tk>"
