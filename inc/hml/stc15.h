@@ -11,8 +11,8 @@
 #ifndef ___HML_STC15_H___
 #define ___HML_STC15_H___
 
+#include "hml/types.h"
 #include <8051.h>
-#include "hml/bit.h"
 
 /*  BYTE Register  */
 __sfr __at (0x84) S4CON      ;
