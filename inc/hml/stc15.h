@@ -229,6 +229,7 @@ __sbit __at (0xFF) P7_7      ;
 #define BIT_NUM_T1CLKO       1
 #define BIT_NUM_T2CLKO       2
 #define BIT_NUM_MCKO_S2      3
+    #define BIT_NUM_SYSCKO_S2 BIT_NUM_MCKO_S2
 #define BIT_NUM_EX2          4
 #define BIT_NUM_EX3          5
 #define BIT_NUM_EX4          6
@@ -357,8 +358,10 @@ __sbit __at (0xFF) P7_7      ;
     #define BIT_NUM_SYSCLKO_2 BIT_NUM_MCLKO_2
 #define BIT_NUM_TX_RX        4
 #define BIT_NUM_ADRJ         5
-#define BIT_NUM_MCLKO_S0     6
-#define BIT_NUM_MCLKO_S1     7
+#define BIT_NUM_MCKO_S0      6
+    #define BIT_NUM_SYSCKO_S0 BIT_NUM_MCKO_S0
+#define BIT_NUM_MCKO_S1      7
+    #define BIT_NUM_SYSCKO_S1 BIT_NUM_MCKO_S1
 
 /* PWMCFG bits */
 #define BIT_NUM_C2INI        0
@@ -478,6 +481,7 @@ __sbit __at (0xFF) P7_7      ;
 #define T1CLKO          BIT_MASK(BIT_NUM_T1CLKO)
 #define T2CLKO          BIT_MASK(BIT_NUM_T2CLKO)
 #define MCKO_S2         BIT_MASK(BIT_NUM_MCKO_S2)
+    #define SYSCKO_S2       BIT_MASK(BIT_NUM_SYSCKO_S2)   /* AUXR2.3's alias */
 #define EX2             BIT_MASK(BIT_NUM_EX2)
 #define EX3             BIT_MASK(BIT_NUM_EX3)
 #define EX4             BIT_MASK(BIT_NUM_EX4)
@@ -592,11 +596,13 @@ __sbit __at (0xFF) P7_7      ;
 #define CLKS1           BIT_MASK(BIT_NUM_CLKS1)
 #define CLKS2           BIT_MASK(BIT_NUM_CLKS2)
 #define MCLKO_2         BIT_MASK(BIT_NUM_MCLKO_2)
-#define SYSCLKO_2       BIT_MASK(BIT_NUM_SYSCLKO_2)   /* CLK_DIV.3's alias */
+    #define SYSCLKO_2       BIT_MASK(BIT_NUM_SYSCLKO_2)   /* CLK_DIV.3's alias */
 #define TX_RX           BIT_MASK(BIT_NUM_TX_RX)
 #define ADRJ            BIT_MASK(BIT_NUM_ADRJ)
-#define MCLKO_S0        BIT_MASK(BIT_NUM_MCKO_S0)
-#define MCLKO_S1        BIT_MASK(BIT_NUM_MCKO_S1)
+#define MCKO_S0         BIT_MASK(BIT_NUM_MCKO_S0)
+    #define SYSCKO_S0       BIT_MASK(BIT_NUM_SYSCKO_S0)   /* CLK_DIV.6's alias */
+#define MCKO_S1         BIT_MASK(BIT_NUM_MCKO_S1)
+    #define SYSCKO_S1       BIT_MASK(BIT_NUM_SYSCKO_S1)   /* CLK_DIV.7's alias */
 
 /* PWMCFG bits */
 #define C2INI           BIT_MASK(BIT_NUM_C2INI)

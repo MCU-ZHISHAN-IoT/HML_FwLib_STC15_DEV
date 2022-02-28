@@ -2,13 +2,13 @@
 
 # ------------------------------------------------------------------------
 # Author     : Weilun Fong | wlf@zhishan-iot.tk
-# Date       : 2022-02-24
+# Date       : 2020-02-26
 # Description: MCU parameters config Makefile
 # E-mail     : mcu@zhishan-iot.tk
 # Make-tool  : GNU Make (http://www.gnu.org/software/make/manual/make.html)
 # Page       : https://hw.zhishan-iot.tk/page/hml/detail/fwlib_stc15.html
 # Project    : HML_FwLib_STC15
-# Version    : v0.4.1
+# Version    : v0.4.2
 # ------------------------------------------------------------------------
 
 # Print note information
@@ -18,7 +18,7 @@ $(info $(SPACE)- Collect MCU config information)
 # [CLKFRE] frequency of MCU clock
 ifneq ($(CLKFRE),)
     ifeq ($(shell $(ECHO) $(CLKFRE) | $(GREP) '^[[:digit:]]*$$'),)
-        $(error invalid CLKFRE value)
+        $(error Invalid CLKFRE value)
     else
         CLOCK_FREQUENCY := $(CLKFRE)
     endif
@@ -33,7 +33,7 @@ else ifeq ($(PRESCALER),6)
 else ifeq ($(PRESCALER),12)
     PRESCALER_FACTOR := 12
 else
-    $(error invalid PRESCALER value, the value must be 6 or 12!)
+    $(error Invalid PRESCALER value, the value must be 6 or 12!)
 endif
 
 # [CODE] internal ROM
@@ -382,15 +382,22 @@ ifneq ($(MCU),)
         IRAM_SIZE := 256
         XRAM_SIZE ?= 256
     else
-        $(error unknow or unsupport MCU model $(MCU))
+        $(error Unknow or unsupport MCU model $(MCU))
     endif
 else
-    $(error unspecify MCU model!)
+    $(error Unspecify MCU model!)
+endif
+
+# [PACKAGING] MCU packaging
+ifneq ($(PACKAGING),)
+    MCU_PACKAGING := $(shell $(ECHO) $(PACKAGING) | $(TR) '[a-z]' '[A-Z]')
+else
+    $(error Uspecify MCU packaging!)
 endif
 
 # Generate and export CFLAGS
 #   Details:
-#     --fsigned-char    Make "char" signed by default
+#    --fsigned-char     Make "char" signed by default
 #    -mmcs51            Generate code for the Intel MCS51 family of processors.
 #                       This is the default processor target.
 #    --std-sdcc99       Use ISO C99 standard with SDCC extensions
@@ -399,9 +406,11 @@ endif
 #    --code-size        Code Segment size
 #    --iram-size        Internal Ram size
 #    --xram-size        External Ram size
+#    --Werror           Treat the warnings as errors
 export CFLAGS := -c -I$(INCDIR) \
 -mmcs51 -D__CONF_MCU_MODEL=$(MCU_MACRO) \
--D__CONF_FRE_CLKIN=$(CLOCK_FREQUENCY)UL -D__CONF_MCU_PRESCALER=$(PRESCALER_FACTOR) \
+-D__CONF_MCU_PACKAGING=$(MCU_PACKAGING) \
+-D__CONF_FRE_CLKIN=$(CLOCK_FREQUENCY)UL \
 --std-sdcc99 --fsigned-char \
 --opt-code-size \
 --code-loc 0x0000 --code-size $(CODE_SIZE) \

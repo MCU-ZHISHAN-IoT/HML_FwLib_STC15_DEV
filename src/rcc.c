@@ -12,6 +12,8 @@
 
 #ifdef COMPILE_RCC
 
+static uint8_t df = 0x1;       /* mark current divided factor */
+
 /*****************************************************************************/
 /** 
  * \author      Weilun Fong
@@ -48,12 +50,11 @@ FunctionalState RCC_getResetFlag(void)
 /** 
  * \author      Weilun Fong
  * \date        2020/11/09
- * \brief       set division factor of main clock
- * \param[in]   val: division factor
+ * \brief       reset
+ * \param[in]   none
  * \return      none
  * \ingroup     RCC
- * \remarks     system clock comes from main clock(MCLK) via prescaler. MCLK may
- *              be internal RC oscillating circuit or external crystal oscillator
+ * \remarks     software reset
 ******************************************************************************/
 void RCC_reset(void)
 {
@@ -75,49 +76,61 @@ void RCC_setBootMode(RCC_bootMode mode)
     CONFB(IAP_CONTR, BIT_NUM_SWBS, mode);
 }
 
-#if (HML_MCU_MODEL_SUBSERIES == MCU_SUBSERIES_STC15W404S) || \
-    (HML_MCU_MODEL_SUBSERIES == MCU_SUBSERIES_STC15W1K16S)
 /*****************************************************************************/
 /**
  * \author      Weilun Fong
- * \date        2022/02/22
- * \brief       set main clock output pin(some models support)
- * \param[in]   pin: expected pin
+ * \date        2022/02/27
+ * \brief       set division factor of main clock(SYSCLK = MCLK/PRESCALER)
+ * \param[in]   d: division factor
  * \return      none
  * \ingroup     RCC
- * \remarks     Main clock can output via Pin MCLKO/MCLKO_2. STC15 MCU with 8-pin
- *              output via P34(MCLKO), and STC15F2k60S2/STC15W201S/STC15F408AD
- *              subseries output via P54(MCLKO). Especially, STC15W404S/STC15W1K16S
- *              subseries support P54(MCLKO) or P16(MCLKO_2). These MCUs can not
- *              support output system clock.
+ * \remarks
 ******************************************************************************/
-void RCC_setMainClockOutputPin(RCC_mclkOutputPin pin)
+void RCC_setClockDivisionFactor(RCC_prescaler d)
 {
-    CONFB(PCON2, BIT_NUM_MCLKO_2, pin); 
+    CLR_BIT_MASK(CLK_DIV, CLKS2 | CLKS1 | CLKS0);
+    CLK_DIV = CLK_DIV | (byte)d; 
+    df = 0x01 << d;
 }
-#endif
 
-#if (HML_MCU_MODEL_SUBSERIES == MCU_SUBSERIES_STC15W4K32S4) || \
-    (HML_MCU_MODEL_SUBSERIES == MCU_SUBSERIES_STC15W401AS ) || \
-    (HML_MCU_MODEL_SUBSERIES == MCU_SUBSERIES_STC15W1K08PWM ) || \
-    (HML_MCU_MODEL_SUBSERIES == MCU_SUBSERIES_STC15W1K20S)
+#if (HML_SUPPORT_SELECT_CLOCK_OUTPUT_PIN == 1)
 /*****************************************************************************/
 /**
  * \author      Weilun Fong
  * \date        2022/02/22
- * \brief       set system clock output pin(some models support)
+ * \brief       set clock output pin
  * \param[in]   pin: expected pin
  * \return      none
  * \ingroup     RCC
- * \remarks     STC15W4K32S4/STC15W401AS/STC15W1K08PWM/STC15W1K20S(LQFP) support
- *              output sytem clock via P54(SYSCLKO)/P16(SYSCLKO_2) which depends
- *              on control bit SYSCLKO_2 in register PCON2(CLK_DIV). These MCUs
- *              can not output main clock.
+ * \remarks     
 ******************************************************************************/
-void RCC_setSystemClockOutputPin(RCC_sysclkOutputPin pin)
+void RCC_setClockOutputPin(RCC_clockOutputPin pin)
 {
-    CONFB(PCON2, BIT_NUM_SYSCLKO_2, pin);
+    CONFB(PCON2, BIT_NUM_MCLKO_2, pin);
 }
+
+/*****************************************************************************/
+/**
+ * \author      Weilun Fong
+ * \date        2022/02/28
+ * \brief       set clock output division factor
+ * \param[in]   d: expected division factor
+ * \return      none
+ * \ingroup     RCC
+ * \remarks
+******************************************************************************/
+void RCC_setClockOutputDivsionFactor(RCC_outputPrescaler d)
+{
+    /* config MCKO_S1 and MCKO_S2 */
+    CLK_DIV = (CLK_DIV & (~(MCKO_S1 | MCKO_S0))) | ((d & 0x03) << 0x06);
+
+#if ((HML_CLOCK_OUTPUT_TYPE == SYSTEMCLOCK) && \
+     (HML_MCU_MODEL_SUBSERIES != MCU_SUBSERIES_STC15W401AS))
+    /* config SYSCKO_S2 */
+    AUXR2 = (AUXR & (~SYSCKO_S2)) | ((d & 0x04) << 0x01);
+#endif
+}
+
 #endif
 
 #endif

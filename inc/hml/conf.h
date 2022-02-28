@@ -16,23 +16,31 @@
  *****************************************************************************/
 
 /**
- * \brief configure clock frequency of MCU
+ * \brief Configure clock frequency of MCU
  */
 #ifndef __CONF_FRE_CLKIN
-    #warning no specified clock frequency, HML will fill it with 11.0592MHz
+    #warning no specified clock frequency, HML will fill it with '11.0592MHz'
     #define __CONF_FRE_CLKIN 11059200UL
 #endif
 
 /**
- * \brief configure module of MCU
+ * \brief Configure module of MCU
  */
 #ifndef __CONF_MCU_MODEL
-    #warning no specified MCU model, HML will fill it with STC15F2K60S2
+    #warning no specified MCU model, HML will fill it with 'STC15F2K60S2'
     #define __CONF_MCU_MODEL MCU_MODEL_STC15F2K60S2
 #endif
 
 /**
- * \brief select HML module which take part in compilation
+ * \brief Define MCU packaging
+ */
+#ifndef __CONF_MCU_PACKAGING
+    #warning no specified MCU packaging, HML will fill it with 'LQFP'
+    #define __CONF_MCU_PACKAGING LQFP
+#endif
+
+/**
+ * \brief Select HML module which take part in compilation
  */
 #define __CONF_COMPILE_EXTI  1
 #define __CONF_COMPILE_GPIO  1

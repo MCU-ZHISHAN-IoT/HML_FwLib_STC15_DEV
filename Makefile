@@ -2,13 +2,13 @@
 
 # ------------------------------------------------------------------------
 # Author     : Weilun Fong | wlf@zhishan-iot.tk
-# Date       : 2022-02-24
+# Date       : 2022-02-26
 # Description: project Makefile
 # E-mail     : mcu@zhishan-iot.tk
 # Make-tool  : GNU Make (http://www.gnu.org/software/make/manual/make.html)
 # Page       : https://hw.zhishan-iot.tk/page/hml/detail/fwlib_stc15.html
 # Project    : HML_FwLib_STC15
-# Version    : v0.4.0
+# Version    : v0.4.2
 # ------------------------------------------------------------------------
 
 # ----------------------------------------
@@ -24,6 +24,7 @@ export ECHO        := echo
 export EECHO       := $(ECHO) -e
 export GREP        := grep
 export LS          := ls
+export MKDIR       := mkdir --parents
 export NPROC       := nproc
 export RM          := rm -f
 export TR          := tr
@@ -46,8 +47,8 @@ PHONY_LIST_IN      := clean distclean mostlyclean help rebuild version
 # Definition of project basic path
 ROOTDIR            := $(CURDIR)
 INCDIR             := $(ROOTDIR)/inc
-MKDIR              := $(ROOTDIR)/mk
-OBJDIR             := $(ROOTDIR)/obj
+MAKEDIR            := $(ROOTDIR)/mk
+OBJDIR             := $(ROOTDIR)/build
 SRCDIR             := $(ROOTDIR)/src
 
 # Configure all custom parameters
@@ -57,9 +58,9 @@ ifeq ($(findstring $(MAKECMDGOALS), $(PHONY_LIST_IN)),)
     ifneq ($(CONF),)
         include $(CONF)
     else
-        include $(MKDIR)/config.mk
+        include $(MAKEDIR)/config.mk
     endif
-    include $(MKDIR)/mcu.mk
+    include $(MAKEDIR)/mcu.mk
 endif
 
 #  Definition of of print format
@@ -82,7 +83,7 @@ EXE_REL  := $(patsubst %.c, $(OBJDIR)/%.rel, $(notdir $(EXE_C)))
 TARGET        := output
 
 # Version define
-MK_VERSION    := v0.4.1
+MK_VERSION    := v0.4.2
 
 # ----------------------------------------
 #  Build rules
@@ -97,33 +98,34 @@ all: $(OBJDIR)/$(TARGET).hex
 # Startup
 startup:
 	@$(EECHO) "$(HIGHLIGHT) - Start to build!\033[0m"
+	@$(MKDIR) $(OBJDIR)
 
 # Compile HML source file(*.c)
 $(SRCS): startup
 $(RELS): $(OBJDIR)/%.rel: $(SRCDIR)/%.c
-	$(VECHO) "CC  $<"
+	$(VECHO) " CC    $<"
 	$(Q)$(CC) $< $(CFLAGS) -o $@
 
 # Generate static library
 $(OBJDIR)/$(LIB): $(RELS)
 	@$(EECHO) "$(HIGHLIGHT) - Make static library `$(BASENAME) $@` \033[0m"
-	$(VECHO) "AR  $@"
+	$(VECHO) " AR    $@"
 	$(Q)$(AR) $(AFLAGS) $@ $^
 
 # Compile executable file
 $(EXE_REL): $(EXE_C) $(OBJDIR)/$(LIB)
 	@$(EECHO) "$(HIGHLIGHT) - Make executable `$(BASENAME) $@` \033[0m"
-	$(VECHO) "CC  $<"
+	$(VECHO) " CCLD  $<"
 	$(Q)$(CC) $< $(CFLAGS) -L$(OBJDIR) -l$(LIBNAME) -o $@
 
 # Generate .hex file
 $(OBJDIR)/$(TARGET).ihx: $(EXE_REL)
 	@$(EECHO) "$(HIGHLIGHT) - Generate .ihx file \033[0m"
-	$(VECHO) "CC  $@"
+	$(VECHO) " CC    $@"
 	$(Q)$(CC) $^ $(OBJDIR)/$(LIB) -o $@
 $(OBJDIR)/$(TARGET).hex: $(OBJDIR)/$(TARGET).ihx
-	@$(EECHO) "\033[36m - Generate .hex file \033[0m"
-	$(VECHO) "PACKIHX $@"
+	@$(EECHO) "$(HIGHLIGHT) - Generate .hex file \033[0m"
+	$(VECHO) " PACKIHX  $@"
 	$(Q)$(PACKIHX) $< > $@ 2>/dev/null
 
 # ----------------------------------------
@@ -140,7 +142,7 @@ distclean:
 # [+] mostlyclean
 .PHONY: mostlyclean
 mostlyclean:
-	$(RM) $(OBJDIR)/*
+	$(RM) -r $(OBJDIR)
 # [+] help
 .PHONY: help
 help:
@@ -152,7 +154,8 @@ help:
 	@$(ECHO) ""
 	@$(ECHO) "Cleaning:"
 	@$(ECHO) "    clean       - Delete temporary files created by build, except for the .lib and .hex files"
-	@$(ECHO) "    mostlyclean - Delete all temporary files and generated library file"
+	@$(ECHO) "    distclean   - Deprecated phony target"
+	@$(ECHO) "    mostlylcean - Delete all temporary files and generated library file"
 	@$(ECHO) ""
 	@$(ECHO) "Info:"
 	@$(ECHO) "    help        - Show help information"
@@ -166,18 +169,18 @@ help:
 	@$(ECHO) "    CODE        - Specify total size of ROM(external+ on-chip) during compilation manually (unit: KB)"
 	@$(ECHO) "    XRAM        - Specify total size of external RAM during compilation manually (unit: KB)"
 	@$(ECHO) ""
-	@$(ECHO) "    CONF        - Specify config Makefile(default: mk/config.mk)"
+	@$(ECHO) "    CONF        - Specify config Makefile(default: Makefile.config)"
 	@$(ECHO) "    JOBS        - Specify number of make job, only for make rebuild. (default: `$(NPROC)`)"
-	@$(ECHO) "    MYFILE      - Specify user source file or Makefile will fill it with \"usr/test.c\". It's noticed that once "
+	@$(ECHO) "    EXE_C       - Specify user source file or Makefile will fill it with 'example/hello/hello.c'. It's noticed that once "
 	@$(ECHO) "                  use this option to compile specified .c file, user should add this option during doing "
 	@$(ECHO) "                  other works, such as clean and rebuild."
 	@$(ECHO) "    VERBOSE     - When the value is not equal to 0, Makefile will print more details during building."
 	@$(ECHO) ""
 	@$(ECHO) "Examples:"
 	@$(ECHO) "    (1) make -j"
-	@$(ECHO) "    (2) make -j MCU=stc89c52rc"
-	@$(ECHO) "    (3) make rebuild MCU=stc89c52rc JOBS=4"
-	@$(ECHO) "    (4) make -j library MCU=stc89c52rc"
+	@$(ECHO) "    (2) make -j MCU=stc15f2k60s2"
+	@$(ECHO) "    (3) make rebuild MCU=iap15l2k61s JOBS=4"
+	@$(ECHO) "    (4) make -j library MCU=iap15l2k61s"
 # [+] library
 .PHONY: library
 library: $(OBJDIR)/$(LIB)
@@ -199,5 +202,5 @@ version:
 	@$(ECHO) "General purpose Makefile for HML firmware library."
 	@$(ECHO) "Copyright(c) 2018-2022 ZHISHAN-IoT, all rights reserved."
 	@$(ECHO) ""
-	@$(ECHO) "Adapted for HML_FwLib_STC89 by Jiabin Hsu <zsiothsu@zhishan-iot.tk>"
+	@$(ECHO) "Adapted for HML_FwLib_STC15 by Weiun Fong <wlf@zhishan-iot.tk>"
 	@$(ECHO) "Report bugs and patches to <wlf@zhishan-iot.tk>"

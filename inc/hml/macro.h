@@ -164,6 +164,37 @@
 #define IS_STC15F408AD_SUBSERIES(model)          ((model == MCU_MODEL_STC15F408AD) || (model == MCU_MODEL_IAP15L413AD))
 
 /**
+ * \brief Define packaging types
+ * \note  Using macro 'NULL'(0x00) to mark generic packaging
+ */
+#define DIP8       0x01
+#define DIP16      0x02
+#define DIP20      0x03
+#define LQFP32     0x04
+#define LQFP44     0x05
+#define LQFP48     0x06
+#define LQFP64S    0x07
+#define LQFP64L    0x08
+#define LSSOP20    0x09
+#define PDIP40     0x0A
+#define PLCC44     0x0B
+#define PQFP44     0x0C
+#define QFN28      0x0D
+#define QFN32      0x0E
+#define QFN48      0x0F
+#define QFN64      0x10
+#define SKDIP28    0x11
+#define SOP8       0x12
+#define SOP16      0x13
+#define SOP20      0x14
+#define SOP28      0x15
+#define SOP32      0x16
+#define TSSOP20    0x17
+#define TSSOP28    0x18
+
+#define IS_VALID_PACKAGING(packaging)            ((packaging >= NULL) && (packaging <= TSSOP28))
+
+/**
  * \brief compile select
  */
 #if (__CONF_COMPILE_EXTI == 1)
@@ -237,6 +268,19 @@
     #define HML_MCU_MODEL __CONF_MCU_MODEL
 #else
     #error HML run-time check: error: unspecify MCU model!(ERROR_CODE-0x04)
+#endif
+
+/**
+ * \brief MCU packaging check
+ */
+#if (defined __CONF_MCU_PACKAGING)
+    #if (!IS_VALID_PACKAGING(__CONF_MCU_PACKAGING))
+        #error HML run-time check: error: invalid MCU packaging type!(ERROR_CODE-0x05)
+    #else
+        #define HML_MCU_PACKAGING __CONF_MCU_PACKAGING
+    #endif
+#else
+    #error HML run-time check: error: unspecify MCU packaging type!(ERROR_CODE-0x06)
 #endif
 
 /**
