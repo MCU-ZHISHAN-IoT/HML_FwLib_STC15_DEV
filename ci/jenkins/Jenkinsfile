@@ -1,0 +1,45 @@
+/**
+ * \Author          Weilun Fong
+ * \Date            2022-03-06
+ * \Description     Jenkins Pipeline Files for HML_Fwlib_STC15
+ */
+
+pipeline {
+
+    agent any
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'));
+    }
+
+    stages {
+        stage('build-with-sdcc-4.1') {
+            steps {
+                withEnv(['PATH=/opt/sdcc/sdcc-4.1.0/bin:${PATH}']) {
+                    cmakeBuild([
+                        buildDir: 'build',
+                        cleanBuild: true,
+                        generator: 'Unix Makefiles',
+                        installation: "cmake-builtin",
+                        sourceDir: '.',
+                        steps: [[ args: "-j", withCmake: true ]]
+                    ])
+                }
+            }
+        }
+        stage('build-with-sdcc-3.8') {
+            steps {
+                withEnv(['PATH=/opt/sdcc/sdcc-3.8.0/bin:${PATH}']) {
+                    cmakeBuild([
+                        buildDir: 'build',
+                        cleanBuild: true,
+                        generator: 'Unix Makefiles',
+                        installation: "cmake-builtin",
+                        sourceDir: '.',
+                        steps: [[ args: "-j", withCmake: true ]]
+                    ])
+                }
+            }
+        }
+    }
+}
